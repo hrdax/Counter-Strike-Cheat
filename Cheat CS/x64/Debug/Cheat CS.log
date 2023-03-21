@@ -1,0 +1,8 @@
+﻿  Cheat CS.cpp
+D:\proyectos pruebas c#\Cheat CS\Cheat CS\Cheat CS.cpp(114,45): warning C4312: 'conversión de tipo': conversión de 'int' a 'LPVOID' de mayor tamaño
+D:\proyectos pruebas c#\Cheat CS\Cheat CS\Cheat CS.cpp(123,78): warning C4312: 'conversión de tipo': conversión de 'int' a 'LPVOID' de mayor tamaño
+D:\proyectos pruebas c#\Cheat CS\Cheat CS\Cheat CS.cpp(129,80): warning C4312: 'conversión de tipo': conversión de 'int' a 'LPVOID' de mayor tamaño
+D:\proyectos pruebas c#\Cheat CS\Cheat CS\Cheat CS.cpp(135,80): warning C4312: 'conversión de tipo': conversión de 'int' a 'LPVOID' de mayor tamaño
+D:\proyectos pruebas c#\Cheat CS\Cheat CS\Cheat CS.cpp(141,79): warning C4312: 'conversión de tipo': conversión de 'int' a 'LPVOID' de mayor tamaño
+D:\proyectos pruebas c#\Cheat CS\Cheat CS\Cheat CS.cpp(147,79): warning C4312: 'conversión de tipo': conversión de 'int' a 'LPVOID' de mayor tamaño
+  Cheat CS.vcxproj -> D:\proyectos pruebas c#\Cheat CS\x64\Debug\Cheat CS.exe
