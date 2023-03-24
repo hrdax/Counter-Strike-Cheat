@@ -1,6 +1,6 @@
-/*You can find the .exe and more here
+/*You can find the .exe and try the cheat here
 Github Repositry: https://github.com/hrdax/Counter-Strike-Cheat
-Thanks for your interest on learning from my code*/
+Thanks for your interest in learning from my code*/
 #include <iostream>
 #include <Windows.h>
 #include <psapi.h>
@@ -8,14 +8,21 @@ Thanks for your interest on learning from my code*/
 //menu
 void opciones()
 {
-    std::cout << "\n1.Enable wallcheat / Activar wallcheat\n"
+
+    std::cout << "\n*WARNING*\n"
+        "\WAIT 1-3 SECONDS AFTER SELECTING 1 OPTION\n"
+        "IF YOU CHOOSE TOO FAST YOUR GAME MAY CRASH\n";
+    std::cout << "\n*ADVERTENCIA*\n"
+        "\ESPERA 1-3 SEGUNDOS DESPUES DE SELECCIONAR 1 OPCION\n"
+        "SI SELECCIONAS MUY RAPIDO TAL VEZ CRASHEE EL JUEGO\n";
+
+    std::cout << "\n1.Enable Silent Wall / Activar Wall Silencioso\n"
         "2.Disable wallcheat / Desactivar wallcheat\n"
-        "3.Transparent Walls / Murallas Transparentes\n"
-        "4.Enable traced models / Activar modelos trazados\n"
-        "5.Disable traced models / Desactivar modelos trazado\n"
-        "6.Bug all weas / Bugear toda la weaxd\n"
-        "7.Debug / Desbugear xd\n"
-        "8.Quit / Salir\n";
+        "3.Enable Transparent Walls / Activar Murallas Transparentes\n"
+        "4.Disable Transparent Walls / Desactivar Murallas Transparentes\n"
+        "5.Bug all weas / Bugear toda la weaxd\n"
+        "6.Debug / Desbugear xd\n"
+        "7.Quit / Salir\n";
 }
 
 /* I covered with "?" the secrets parts that you have to learn how they work and why they are there and I left some for clues, when you understand how to manage the process memory
@@ -30,17 +37,18 @@ si tienes eso estas muy cerca de entender como completar este codigo y aprender 
 CS 1.6 si tienes problemas entiendiendo como crear opcodes no es muy complicado es como crear little-endian la dificultad es que necesitas 
 saber como hacer referencias a las distintas funciones que hay en lenguaje ensamblador para interactuar con la memoria suerte :) (sugiero aprender como funcionan algunas funciones en opengl)*/
 
+
 int main()
 {
     //direcciones de memoria a modificar
-    int GlBeginaddss = 0x0; /* I'm not going to upload this because you have to learn
+    int GlBeginaddss = 0x0????; /* I'm not going to upload this because you have to learn
                                     how to manage system memory processes on your own sorry! I know that if you want to learn you will know how to*/
 
-    int GlBeginWalladds = 0x0;
+    int GlBeginWalladds = 0x0????;
 
-    int ModelsTexturesGLVERTEX = 0x0; /*No voy a subir esto porque tienes que aprender a administrar los procesos de memoria del sistema por tu cuenta
+    int ModelsTexturesGLVERTEX = 0x0????; /*No voy a subir esto porque tienes que aprender a administrar los procesos de memoria del sistema por tu cuenta
                                             perdon pero, sé que si quieres aprender lo podras hacer.*/
-    int WallsTexturesGLVERTEX = 0x0;
+    int WallsTexturesGLVERTEX = 0x0????;
     int count = 0;
     // guarda la info del proceso
     PROCESS_INFORMATION proceso;
@@ -85,8 +93,8 @@ int main()
                     if (wcsstr(nombre_arch_proceso, nombre_proceso) != NULL)
                     {
                         juego = false;
-                        std::cout << "\nOpenGL Cheat pal counter by hrdax\n";
-                        std::cout << "\nV 1.0 testing wall\n";
+                        std::cout << "\n*Simple OpenGL Wall Cheat pal counter by hrdax*\n";
+                        std::cout << "\nV 1.0\n";
                         // Obtiene el handle del proceso y lo guarda en proceso.hProceso
                         proceso.hProcess = hProceso;
                         break;
@@ -119,23 +127,26 @@ int main()
         std::string opcion;
         std::cin >> opcion;
 
-        //prender
+        //prender wall
         if (opcion == "1")
         {
-
-            int bufglbegin = 0x0;
-            unsigned int subroutineAddress1 = 0x01CF707E;
-            unsigned char buffer1[] = { 0xE8, 0x00, 0x00, 0x00, 0x00 };
+            //ubicacion funcion glbegin 
+            int bufglbegin = 0x0????;
+            //ubicacion subaddress que servira de funcion
+            unsigned int subroutineAddress1 = 0x0???;
+            /* 0xE8 = CALL (opcode a assembly language) yes to write correctly to the memory you have to convert what you want to opcodes | si, para escribir correctamente en la memoria tendras que convertir
+            lo que quieres escribir en la memoria a opcodes*/
+            unsigned char buffer1[] = { 0xE8, 0x00, 0x00, 0x00, 0x00 }; // this is something like CALL 0000000
             unsigned int relativeAddress1 = subroutineAddress1 - (bufglbegin + sizeof(buffer1));
 
             memcpy(buffer1 + 1, &relativeAddress1, sizeof(relativeAddress1));
-            if (!WriteProcessMemory(proceso.hProcess, (LPVOID)bufglbegin, buffer1, sizeof(buffer1), &byteWritten)) { //CALL xxxxx..
+            if (!WriteProcessMemory(proceso.hProcess, (LPVOID)bufglbegin, buffer1, sizeof(buffer1), &byteWritten)) { //so the final result is CALL 01CF707E
                 std::cerr << "Couldn't write process memory: " << GetLastError() << std::endl;
             }
 
             int bufferLength = sizeof(buffer1);
 
-            unsigned char nop[] = { 0x90 }; //NOP
+            unsigned char nop[] = { 0x90 }; //NOP {is something like dont do nothing to that address) (NOP es como indiciar al espacio que no haga nada)
             int bgbufmemoria2 = 0x01D90D23;
             bufferLength = sizeof(nop);
             WriteProcessMemory(
@@ -161,7 +172,7 @@ int main()
                 &byteWritten);
 
             int funcbufmemoriahl = 0x01CF707E;
-            unsigned char buffer3[] = { 0x??, 0x??, 0x??, 0x??, 0x?? }; //PUSH 0B71
+            unsigned char buffer3[] = { 0x68, 0x71, 0x0B, 0x00, 0x00 }; //PUSH 0B71
             bufferLength = sizeof(buffer3);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -170,8 +181,8 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl2 = 0x01CF7083;
-            unsigned char buffer4[] = { 0x??, 0x??, 0x??, 0x??, 0x?? }; // gl disable
+            int funcbufmemoriahl2 = 0x????;
+            unsigned char buffer4[] = { 0xFF, 0x15, 0x5C, 0x89, 0x7E, 0x02 }; // gl disable CALL DWORD PTR DS:[27E895C]
             bufferLength = sizeof(buffer4);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -180,7 +191,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl3 = 0x01CF7088;
+            int funcbufmemoriahl3 = 0x????;
             unsigned char buffer5[] = { 0x6A, 0x05 }; //PUSH 5
             bufferLength = sizeof(buffer5);
             WriteProcessMemory(
@@ -190,13 +201,13 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl4 = 0x01CF708A;
-            unsigned char buffer6[] = { 0xFF, 0x15, 0xEC, 0x89, 0x7E, 0x02 }; // CALL DWORD PTR DS:[27E89EC]
+            int funcbufmemoriahl4 = 0x????;
+            unsigned char buffer6[] = { 0xFF, 0x15, 0x??, 0x??, 0x??, 0x?? }; // GL BEGIN CALL DWORD PTR DS:[27E89EC]
             bufferLength = sizeof(buffer6);
             WriteProcessMemory(proceso.hProcess, (LPVOID)funcbufmemoriahl4, buffer6, bufferLength, &byteWritten);
 
-            int funcbufmemoriahl5 = 0x01CF7090;
-            unsigned char buffer7[] = { 0x?? }; //RETN
+            int funcbufmemoriahl5 = 0x????;
+            unsigned char buffer7[] = { 0xC3 }; //RETN
             bufferLength = sizeof(buffer7);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -204,7 +215,10 @@ int main()
                 buffer7,
                 bufferLength,
                 &byteWritten);
-
+            /* I hope you are understanding I'm going to leave here this example of how to do the CALL to our functions | Yes you have to find memory spaces that are free to write our code
+            a free space in memory looks like this 000000 or 0x00 0x00 0x00 0x00*/
+            /* Espero estes entendiendo dejare este ejemplo de como hacer un CALL a una direccion de memoria libre donde podremos guardar nuestra funcion | Si, debes encontrar espacios de memoria donde esten libres para escribir nuestro codigo
+            un espacio libre en la memoria se ve como esto 000000 or 0x00 0x00 0x00 0x00 */
             int bufglend = 0x01D90E1B;
             unsigned int subroutineAddress = 0x01CF70BB;
             unsigned char buffer8[] = { 0xE8, 0x00, 0x00, 0x00, 0x00 };
@@ -225,8 +239,8 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcglendfmemoriahl1 = 0x01CF70BB;
-            unsigned char buffer9[] = { 0x??, 0x??, 0x??, 0x??, 0x??, 0x?? }; // CALL DWORD PTR DS:[27E81B4]
+            int funcglendfmemoriahl1 = 0x????;
+            unsigned char buffer9[] = { 0xFF, 0x15, 0x??, 0x??, 0x??, 0x?? }; // CALL DWORD PTR DS:[27E81B4]
             bufferLength = sizeof(buffer9);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -235,7 +249,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcglendfmemoriahl2 = 0x01CF70C1;
+            int funcglendfmemoriahl2 = 0x?????;
             unsigned char buffer10[] = { 0x??, 0x??, 0x??, 0x??, 0x?? }; // PUSH 0B71
             bufferLength = sizeof(buffer10);
             WriteProcessMemory(
@@ -245,8 +259,8 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcglendfmemoriahl3 = 0x01CF70C6;
-            unsigned char buffer11[] = { 0x??, 0x??, 0x??, 0x??, 0x?? }; //CALL opengl32.glEnable
+            int funcglendfmemoriahl3 = 0x?????;
+            unsigned char buffer11[] = { 0xFF, 0x15, 0x??, 0x??, 0x??, 0x?? }; //CALL opengl32.glEnable CALL DWORD PTR DS:[27E8120]
             bufferLength = sizeof(buffer11);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -255,7 +269,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcglendfmemoriahl4 = 0x01CF70CB;
+            int funcglendfmemoriahl4 = 0x01CF70CC;
             unsigned char buffer12[] = { 0xC3 }; //RETN
             bufferLength = sizeof(buffer12);
             WriteProcessMemory(
@@ -265,16 +279,16 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            std::cout << "\n[+] Wall On / Prendido\n";
+            std::cout << "\n\n\n\n\n[+] Wall On / Prendido\n";
         }
-        //apagar
+        //turn OFF wall | apagar wall
         else if (opcion == "2")
         {
-            int bufglbegin = 0x0; //discover it your self :) | descubrelo tu mismo :)
-            unsigned char buff[] = { 0x??, 0x?? }; //PUSH 5
+            int bufglbegin = 0x01D90D1E;
+            unsigned char buff[] = { 0x6A, 0x05 }; //PUSH 5
             int bufferLength = sizeof(buff);
             if (!WriteProcessMemory(proceso.hProcess, (LPVOID)bufglbegin, buff, sizeof(buff), &byteWritten)) {
-                std::cerr << "Couldn't write process memory: " << GetLastError() << std::endl;
+                std::cerr << "No se pudo escribir en la memoria :|: " << GetLastError() << std::endl;
             }
 
 
@@ -289,7 +303,7 @@ int main()
                 &byteWritten);
 
             int funcbufmemoriahl = 0x01CF707E;
-            unsigned char buffer3[] = { 0x00, 0x00 }; // liberar memoria / borrar y dejarla como estaba
+            unsigned char buffer3[] = { 0x00, 0x00 }; // liberar memoria / borrar y dejarla como estaba simplemente dejar su valor en 0
             bufferLength = sizeof(buffer3);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -298,7 +312,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl2 = 0x01CF7083;
+            int funcbufmemoriahl2 = 0x0????;
             WriteProcessMemory(
                 proceso.hProcess,
                 (LPVOID)funcbufmemoriahl2,
@@ -306,7 +320,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl3 = 0x01CF7088;
+            int funcbufmemoriahl3 = 0x0?????;
             WriteProcessMemory(
                 proceso.hProcess,
                 (LPVOID)funcbufmemoriahl3,
@@ -314,10 +328,10 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl4 = 0x01CF708A;
+            int funcbufmemoriahl4 = 0x??????;
             WriteProcessMemory(proceso.hProcess, (LPVOID)funcbufmemoriahl4, buffer3, bufferLength, &byteWritten);
 
-            int funcbufmemoriahl5 = 0x01CF7090;
+            int funcbufmemoriahl5 = 0x?????;
             WriteProcessMemory(
                 proceso.hProcess,
                 (LPVOID)funcbufmemoriahl5,
@@ -334,7 +348,7 @@ int main()
             }
 
             int funcglendfmemoriahl1 = 0x01CF70BB;
-            unsigned char buffer9[] = { 0x00, 0x00 }; //libera la memoria, establece en 0
+            unsigned char buffer9[] = { 0x00, 0x00 }; // CALL DWORD PTR DS:[27E81B4]
             bufferLength = sizeof(buffer9);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -343,7 +357,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcglendfmemoriahl2 = 0x01CF70C1;
+            int funcglendfmemoriahl2 = 0x?????;
             WriteProcessMemory(
                 proceso.hProcess,
                 (LPVOID)funcglendfmemoriahl2,
@@ -351,7 +365,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcglendfmemoriahl3 = 0x01CF70C6;
+            int funcglendfmemoriahl3 = 0x?????;
             WriteProcessMemory(
                 proceso.hProcess,
                 (LPVOID)funcglendfmemoriahl3,
@@ -359,7 +373,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcglendfmemoriahl4 = 0x01CF70CB;
+            int funcglendfmemoriahl4 = 0x?????;
             WriteProcessMemory(
                 proceso.hProcess,
                 (LPVOID)funcglendfmemoriahl4,
@@ -367,7 +381,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            std::cout << "\n[-] Wall OFF / Apagado\n";
+            std::cout << "\n\n\n\n\n[-] Wall OFF / Apagado\n";
         }
         //MURALLAS TRANSPARENTES
         else if (opcion == "3")
@@ -381,7 +395,7 @@ int main()
 
             int bufferLength = sizeof(buffer1);
 
-            unsigned char nop[] = { 0x90 }; //NOP deja un espacio vacio en la memoria
+            unsigned char nop[] = { 0x90 }; //NOP
             int bgbufmemoria2 = 0x01D486AC;
             bufferLength = sizeof(nop);
             WriteProcessMemory(
@@ -426,7 +440,7 @@ int main()
                 &byteWritten);
 
             int funcbufmemoriahl2 = 0x01CF7009;
-            unsigned char buffer4[] = { 0x??, 0x??, 0x??, 0x??, 0x?? }; // CALL xxxx...
+            unsigned char buffer4[] = { 0xE8, 0xE2, 0xF2, 0x03, 0x00 }; // CALL xxxx...
             bufferLength = sizeof(buffer4);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -436,7 +450,7 @@ int main()
                 &byteWritten);
 
             int funcbufmemoriahl3 = 0x01CF700E;
-            unsigned char buffer5[] = { 0x??, 0x??, 0x? }; //ADD ESP,4
+            unsigned char buffer5[] = { 0x83, 0xC4, 0x04 }; //ADD ESP,4
             bufferLength = sizeof(buffer5);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -446,11 +460,11 @@ int main()
                 &byteWritten);
 
             int funcbufmemoriahl4 = 0x01CF7011;
-            unsigned char buffer6[] = { 0x?? }; // PUSHAD
+            unsigned char buffer6[] = { 0x60 }; // PUSHAD
             bufferLength = sizeof(buffer6);
             WriteProcessMemory(proceso.hProcess, (LPVOID)funcbufmemoriahl4, buffer6, bufferLength, &byteWritten);
 
-            int funcbufmemoriahl5 = 0x01CF7012;
+            int funcbufmemoriahl5 = 0x??????;
             unsigned char buffer7[] = { 0x68, 0x03, 0x03, 0x00, 0x00 }; // PUSH 303
             bufferLength = sizeof(buffer7);
             WriteProcessMemory(
@@ -460,8 +474,8 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl6 = 0x01CF7017;
-            unsigned char buffer8[] = { 0x??, 0x??, 0x??, 0x??, 0x?? }; // PUSH 302
+            int funcbufmemoriahl6 = 0x?????;
+            unsigned char buffer8[] = { 0x68, 0x02, 0x03, 0x00, 0x00 }; // PUSH 302
             bufferLength = sizeof(buffer8);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -470,8 +484,8 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl7 = 0x01CF701C;
-            unsigned char buffer9[] = { 0x??, 0x??, 0x??, 0x??, 0x?? }; // CALL opengl32.glBlendFunc
+            int funcbufmemoriahl7 = 0x?????;
+            unsigned char buffer9[] = { 0xFF, 0x15, 0x??, 0x??, 0x??, 0x0? }; // CALL opengl32.glBlendFunc CALL DWORD PTR DS : [27E85DC]
             bufferLength = sizeof(buffer9);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -480,8 +494,17 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl8 = 0x01CF7021;
-            unsigned char buffer10[] = { 0x68, 0x71, 0x0B, 0x00, 0x00 }; // PUSH 0B71
+            int funcbufmemoriahl8 = 0x?????;
+            /*Lets look at this opcode 0x68, 0x71, 0x0B, 0x00, 0x00 = PUSH 0B71 
+            if you notice 0x68 means PUSH in assembly and 0x71 = 71 and 0x0B = 0B so..
+            It's like little-endian, it just puts the values that come after the instruction upside down
+            you can see this automatic transformation too with a debugger program*/
+
+            /*Veamos este código de operación 0x68, 0x71, 0x0B, 0x00, 0x00 = PUSH 0B71
+              si nota que 0x68 significa PUSH en ensamblado y 0x71 = 71 y 0x0B = 0B, entonces ...
+              Es como little-endian, simplemente pone los valores que vienen después de la instrucción al revés
+              también puedes ver esta transformación automática con un programa de depuración*/
+            unsigned char buffer10[] = { 0x68, 0x71, 0x0B, 0x00, 0x00 }; // PUSH 0B71 
             bufferLength = sizeof(buffer10);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -489,9 +512,19 @@ int main()
                 buffer10,
                 bufferLength,
                 &byteWritten);
+            // memory to write | memoria a la cual se escribira el nuevo valor
+            int funcbufmemoriahl9 = 0x??????;
 
-            int funcbufmemoriahl9 = 0x01CF7026;
-            unsigned char buffer11[] = { 0x??, 0x??, 0x??, 0x??, 0x?? }; // CALL opengl32.glDisable
+            /*Here another explanation
+            0xFF, 0x15 means = CALL DWORD PTR DS:[] so...
+            0x5C = 5C, 0x89 = 89 and so on... but inside the [] */
+            
+            /*Otro ejemplo 
+            0xFF, 0x15 hace referencia a = CALL DWORD PTR DS:[] entonces...
+            0x5C = 5C, 0x89 = 89 y asi con los demas.. pero dentro de [] */
+            
+            // value in opcode to write | valor en opcode el cual se escribira
+            unsigned char buffer11[] = { 0xFF, 0x15, 0x5C, 0x89, 0x7E, 0x02 }; // CALL opengl32.glDisable  CALL DWORD PTR DS:[27E895C]
             bufferLength = sizeof(buffer11);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -500,8 +533,8 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl10 = 0x01CF702B;
-            unsigned char buffer12[] = { 0x68, 0xE2, 0x0B, 0x00, 0x00 }; // PUSH 0BE2
+            int funcbufmemoriahl10 = 0x???????;
+            unsigned char buffer12[] = { 0x68, 0x??, 0x??, 0x00, 0x00 }; // PUSH 0BE2
             bufferLength = sizeof(buffer12);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -510,8 +543,8 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl11 = 0x01CF7030;
-            unsigned char buffer13[] = { 0x??, 0x??, 0x??, 0x??, 0x?? }; // CALL opengl32.glEnable
+            int funcbufmemoriahl11 = 0x?????;
+            unsigned char buffer13[] = { 0xFF, 0x15, 0x??, 0x??, 0x??, 0x?? }; // CALL opengl32.glEnable CALL DWORD PTR DS:[27E8120]
             bufferLength = sizeof(buffer13);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -520,8 +553,8 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl12 = 0x01CF7035;
-            unsigned char buffer14[] = { 0x68, 0x66, 0x66, 0xE6, 0x3E }; // PUSH 3EE66666
+            int funcbufmemoriahl12 = 0x?????;
+            unsigned char buffer14[] = { 0x68, 0x66, 0x??, 0x??, 0x?? }; // PUSH 3EE66666
             bufferLength = sizeof(buffer14);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -530,7 +563,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl13 = 0x01CF703A;
+            int funcbufmemoriahl13 = 0x??????;
             unsigned char buffer15[] = { 0x68, 0x66, 0x66, 0x66, 0x3F }; // PUSH 3F666666
             bufferLength = sizeof(buffer15);
             WriteProcessMemory(
@@ -540,7 +573,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl14 = 0x01CF703F;
+            int funcbufmemoriahl14 = 0x??????;
             WriteProcessMemory(
                 proceso.hProcess,
                 (LPVOID)funcbufmemoriahl14,
@@ -548,7 +581,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl15 = 0x01CF7044;
+            int funcbufmemoriahl15 = 0x??????;
             WriteProcessMemory(
                 proceso.hProcess,
                 (LPVOID)funcbufmemoriahl15,
@@ -556,8 +589,8 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl16 = 0x01CF7049;
-            unsigned char buffer16[] = { 0xE8, 0x54, 0x9F, 0xE6, 0x5F }; // CALL opengl32.glColor4f
+            int funcbufmemoriahl16 = 0x?????;
+            unsigned char buffer16[] = { 0xFF, 0x15, 0x??, 0x??, 0x??, 0x?? }; // CALL opengl32.glColor4f CALL DWORD PTR DS:[27E8174]
             bufferLength = sizeof(buffer16);
             WriteProcessMemory(
                 proceso.hProcess,
@@ -566,7 +599,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl17 = 0x01CF704E;
+            int funcbufmemoriahl17 = 0x??????;
             unsigned char buffer17[] = { 0x61 }; // POPAD
             bufferLength = sizeof(buffer17);
             WriteProcessMemory(
@@ -576,7 +609,7 @@ int main()
                 bufferLength,
                 &byteWritten);
 
-            int funcbufmemoriahl18 = 0x01CF704F;
+            int funcbufmemoriahl18 = 0x01CF7053;
             unsigned char buffer18[] = { 0xC3 }; // RETN
             bufferLength = sizeof(buffer18);
             WriteProcessMemory(
@@ -585,36 +618,200 @@ int main()
                 buffer18,
                 bufferLength,
                 &byteWritten);
-            std::cout << "\n[+] Transparent Walls ON / Murallas Transparentes Activado\n";
+            std::cout << "\n\n\n\n\n[+] Transparent Walls ON / Murallas Transparentes Activado\n";
         }
         else if (opcion == "4")
         {
-            byte buffermodel = 2;
-            WriteProcessMemory(proceso.hProcess, (LPVOID)ModelsTexturesGLVERTEX, &buffermodel, 1, &byteWritten);
-            std::cout << "\n[+] Models/os trazados On / Prendido\n";
+
+            int bufglbegin = 0x01D486A7;
+            unsigned char buffer1[] = { 0x50 };
+            int bufferLength = sizeof(buffer1);
+
+            if (!WriteProcessMemory(proceso.hProcess, (LPVOID)bufglbegin, buffer1, sizeof(buffer1), &byteWritten)) { //PUSH EAX
+                std::cerr << "No pudo escribir en la memoria :| " << GetLastError() << std::endl;
+            }
+
+
+
+            unsigned char buffer2[] = { 0xE8, 0x43, 0xDC, 0xFE, 0xFF }; //CALL 01D362F0
+            int bgbufmemoria2 = 0x0?????;
+            bufferLength = sizeof(buffer2);
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)bgbufmemoria2,
+                buffer2,
+                bufferLength,
+                &byteWritten);
+
+            unsigned char buffer22[] = { 0X83, 0xC4, 0x04 }; //ADD ESP,4
+            int bgbufmemoria3 = 0x?????;
+            bufferLength = sizeof(buffer22);
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)bgbufmemoria3,
+                buffer22,
+                bufferLength,
+                &byteWritten);
+
+
+            int funcbufmemoriahl = 0x??????;
+            unsigned char buffer3[] = { 0x00, 0x00 }; // Clear used memory / limpiar memoria usada
+            bufferLength = sizeof(buffer3);
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl2 = 0x??????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl2,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl3 = 0x?????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl3,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl4 = 0x??????;
+            WriteProcessMemory(proceso.hProcess, (LPVOID)funcbufmemoriahl4, buffer3, bufferLength, &byteWritten);
+
+            int funcbufmemoriahl5 = 0x?????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl5,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl6 = 0x0?????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl6,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl7 = 0x?????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl7,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl8 = 0x?????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl8,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl9 = 0x?????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl9,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl10 = 0x??????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl10,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl11 = 0x??????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl11,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl12 = 0x?????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl12,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl13 = 0x??????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl13,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl14 = 0x??????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl14,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl15 = 0x??????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl15,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl16 = 0x??????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl16,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl17 = 0x??????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl17,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+
+            int funcbufmemoriahl18 = 0x?????;
+            WriteProcessMemory(
+                proceso.hProcess,
+                (LPVOID)funcbufmemoriahl18,
+                buffer3,
+                bufferLength,
+                &byteWritten);
+            std::cout << "\n\n\n\n\n[-] Transparent Walls OFF / Murallas Transparentes Dectivado\n";
         }
         else if (opcion == "5")
         {
-            byte buffermodel = 5;
-            WriteProcessMemory(proceso.hProcess, (LPVOID)ModelsTexturesGLVERTEX, &buffermodel, 1, &byteWritten);
-            std::cout << "\n[-] Models/os destrazados Off / Apagado\n";
+            byte bufferwallvertice = 2;
+            WriteProcessMemory(proceso.hProcess, (LPVOID)WallsTexturesGLVERTEX, &bufferwallvertice, 1, &byteWritten);
+            std::cout << "\n\n\n\n\n[+] All weas are bugged xd/ Se bugeo toda la wea xd\n";
         }
         else if (opcion == "6")
         {
-            byte bufferwallvertice = 2;
+            byte bufferwallvertice = 9;
             WriteProcessMemory(proceso.hProcess, (LPVOID)WallsTexturesGLVERTEX, &bufferwallvertice, 1, &byteWritten);
-            std::cout << "\n[+] All weas are bugged xd/ Se bugeo toda la wea xd\n";
+            std::cout << "\n\n\n\n\n[-] Debuged / Se desbugeo\n";
         }
         else if (opcion == "7")
         {
-            byte bufferwallvertice = 9;
-            WriteProcessMemory(proceso.hProcess, (LPVOID)WallsTexturesGLVERTEX, &bufferwallvertice, 1, &byteWritten);
-            std::cout << "\n[-] Debuged / Se desbugeo\n";
-        }
-        else if (opcion == "8")
-        {
-            std::cout << "[*] Quitting..\nSaliendo..";
-            Sleep(100);
+            std::cout << "\n\n\n\n[*] Quitting..\nSaliendo..";
+            Sleep(1000);
             salir = false;
         }
 
