@@ -7,6 +7,10 @@ Fue hecho para ser un código educativo, para poder yo aprender más y para cual
 
 <b>English | Español</b>
 
+<b>*Important before the use you have to select Renderer to "OpenGL" | 
+Importante antes de usarlo debes de seleccionar el Renderer a "OpenGL"*</b>
+![CS S important](https://user-images.githubusercontent.com/74321905/227653575-835cf813-5b86-4452-9342-8719b0258089.JPG)
+
 To use the cheat is very simple | Para usar el cheat es muy simple
 1. If you open it, you may have the Unknown Publisher Warning just press more info and "run anyway" like this
 
