@@ -5,6 +5,10 @@ It was made to be an educational code, for me to learn more and for anyone who w
 Simple OpenGL cs 1.6 Cheat hecho en C++, lo hice porque quería practicar el uso de la gestión de procesos del sistema con C++, no lo use para malos propósitos
 Fue hecho para ser un código educativo, para poder yo aprender más y para cualquiera que quiera saber cómo se hacen este tipo de cheats.
 
+Don't try this with steam version, I didn't. Maybe you will get banned I don't know.
+
+No intentes probar con la version de steam, yo no lo hice. Tal vez te baneen no lo sé.
+
 <b>English | Español</b>
 
 <b>*Important before the use you have to select Renderer to "OpenGL" | 
